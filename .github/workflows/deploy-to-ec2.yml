@@ -19,7 +19,6 @@ jobs:
           git pull origin master
           sudo docker stop myApp
           sudo docker rm myApp
-          cd program
           sudo docker build -t my-app:latest .
           sudo docker run -d \
             -e "DB_USER=${{ secrets.DB_USER }}" \

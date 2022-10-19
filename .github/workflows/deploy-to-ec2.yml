@@ -5,14 +5,15 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    environment: Production
     steps:
     - name: Deploy to EC2 by using SSH
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        port: ${{ secrets.PORT }}
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        port: ${{ secrets.EC2_PORT }}
         script: |
           cd /home/ubuntu/app
           git pull origin master
@@ -20,4 +21,12 @@ jobs:
           docker rm myApp
           cd program
           docker build -t my-app:latest .
-          docker run -d -e "HTTP_PORT=:80" -p 80:80 --name myApp my-app:latest
+          docker run -d \
+            -e "DB_USER=${{ secrets.DB_USER }}" \
+            -e "DB_PASS=${{ secrets.DB_PASS }}" \
+            -e "DB_HOST=${{ secrets.DB_HOST }}" \
+            -e "DB_PORT=${{ secrets.DB_PORT }}" \
+            -e "DB_NAME=${{ secrets.DB_NAME }}" \
+            -e "PORT=${{ secrets.PORT }}" \
+            -e "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+          -p 80:80 --name myApp my-app:latest

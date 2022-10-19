@@ -13,6 +13,8 @@ import (
 func InitControllers(e *echo.Echo, db *gorm.DB) {
 	e.Use(middleware.Recover())
 
+	e.GET("/ping", Ping)
+
 	userRepository := userRepositoryPkg.NewUserRepositoryImpl(db)
 	userService := userServicePkg.NewUserServiceImpl(userRepository)
 	userController := userControllerPkg.NewUserController(userService)

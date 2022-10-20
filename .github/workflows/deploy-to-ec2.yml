@@ -53,4 +53,4 @@ jobs:
             -e "DB_NAME=${{ secrets.DB_NAME }}" \
             -e "PORT=${{ secrets.PORT }}" \
             -e "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
-          -p ${{ secrets.PORT }}:${{ secrets.PORT }} --name myApp suryawarior44/rest-training:latest
+          -p 80:80 --name myApp suryawarior44/rest-training:latest
